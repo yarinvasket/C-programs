@@ -4,11 +4,13 @@
 #include "Reservation.h"
 #define HOTEL_FLOORS 4
 #define ROOMS_PER_FLOOR 4
-struct Hotel {
-	struct Room rooms[HOTEL_FLOORS][ROOMS_PER_FLOOR];
-	struct Reservation* reservations;
-	struct Customer* customers;
-};
-void showHotelStatus(struct Hotel* hotel); 
-void addCustomer(struct Customer* new_customer);
+typedef struct Hotel {
+	Room* rooms[HOTEL_FLOORS][ROOMS_PER_FLOOR];
+	Reservation* reservations;
+	Customer** customers;
+}Hotel;
+void checkIn();
+Hotel* newHotel(Reservation* reservations, Customer** customers);
+void showHotelStatus(Hotel* hotel); 
+void addCustomer(Hotel* hotel,Customer* new_customer);
 

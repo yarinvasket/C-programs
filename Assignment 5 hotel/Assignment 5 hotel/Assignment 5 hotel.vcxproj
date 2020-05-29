@@ -150,6 +150,7 @@
     <ClCompile Include="Assignment 5 hotel.c" />
     <ClCompile Include="Customer.c" />
     <ClCompile Include="Hotel.c" />
+    <ClCompile Include="Reservation.c" />
     <ClCompile Include="Room.c" />
   </ItemGroup>
   <ItemGroup>

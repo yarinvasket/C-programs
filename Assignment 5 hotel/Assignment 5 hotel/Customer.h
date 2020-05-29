@@ -1,8 +1,8 @@
 #pragma once
-struct Customer {
+typedef struct Customer {
 	int id;
 	char* name;
 	long ccNumber;
 
-};
-void checkIn();
+}Customer;
+Customer* newCostumer(int id, char* name, long ccnumber);
