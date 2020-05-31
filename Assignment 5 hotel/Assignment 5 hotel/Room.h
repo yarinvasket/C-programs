@@ -6,6 +6,7 @@ typedef struct Room {
 	int breakfastPeople;
 
 }Room;
-Room* newRoom(int people, int breakfastPeople);
+Room* newEmptyRoom();
+Room* newRoom(bool occupied, int people, int breakfastPeople);
 
 

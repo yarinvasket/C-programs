@@ -10,7 +10,7 @@ Hotel* newHotel() {
 	if (hotel) {
 		for (int i = 0;i < HOTEL_FLOORS;i++) {
 			for (int j = 0;j < ROOMS_PER_FLOOR;j++) {
-				Room* room = newRoom(0, 0);
+				Room* room = newEmptyRoom();
 				hotel->rooms[i][j] = room;
 			}
 		}
@@ -59,20 +59,19 @@ void checkIn(Hotel* hotel) {
 		for (int j = 0;j < ROOMS_PER_FLOOR;j++) {
 			if (!hotel->rooms[i][j]->occupied) {
 				newReservation("00/00/0000",hotel->customers[customerNumber] , people, breakfast, hotel->rooms[i][j]);
+				hotel->rooms[i][j] = newRoom(true, people, breakfast);
 				return;
 			}
 		}
 	}
 	printf("We could not complete the order since the hotel is fully occupied.\n");
-	
 }
 void checkOut(Hotel* hotel, int roomNumber) {
 	for (int i = 0;i < HOTEL_FLOORS;i++) {
 		for (int j = 0;j < ROOMS_PER_FLOOR;j++) {
 			if (!roomNumber--) {
-				hotel->rooms[i][j]->breakfastPeople = 0;
-				hotel->rooms[i][j]->people = 0;
-				hotel->rooms[i][j]->occupied = false;
+				free(hotel->rooms[i][j]);
+				hotel->rooms[i][j] = newEmptyRoom();
 			}
 		}
 	}
@@ -94,8 +93,8 @@ void freeHotel(Hotel* hotel) {
 	for (int i = 0;i < MAX_RESERVATIONS_AMOUNT;i++) {
 		freeReservation(hotel->reservations[i]);
 	}
-	free(hotel);*/
-	
+	free(hotel);
+	*/
 }
 
 
