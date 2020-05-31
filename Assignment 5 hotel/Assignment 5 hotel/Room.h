@@ -7,6 +7,5 @@ typedef struct Room {
 
 }Room;
 Room* newRoom(int people, int breakfastPeople);
-void checkOut();
 
 

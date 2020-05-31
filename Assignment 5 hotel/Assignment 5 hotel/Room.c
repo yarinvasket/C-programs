@@ -3,12 +3,9 @@
 #include <stdlib.h>
 #include "Room.h"
 Room* newRoom(int people, int breakfastPeople) {
-	Room* room = malloc(sizeof(Room));
+	Room* room = (Room*)calloc(1, sizeof(Room));
+	room->occupied = false;
 	room->people = people;
 	room->breakfastPeople = breakfastPeople;
-	room->occupied = false;
 	return room;
-}
-void checkOut() {
-
 }

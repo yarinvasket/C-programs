@@ -6,12 +6,18 @@
 #include <stdbool.h>
 
 Reservation* newReservation(char date[DATE_FORMAT_LENGTH], Customer* customer, int peopleInRoom, int breakfastPeople, Room* room) {
-	Reservation* reser = malloc(sizeof(Reservation));
-	reser->customer = customer;
+	Reservation* reser = (Reservation*)calloc(1, sizeof(Reservation));
 	reser->breakfastReservedPeople = breakfastPeople;
+	reser->customer = customer;
 	reser->peopleInRoom = peopleInRoom;
 	reser->room = room;
-	for (int i = 0;i < DATE_FORMAT_LENGTH;i++)
+	for (int i = 0;i < DATE_FORMAT_LENGTH;i++) {
 		reser->date[i] = date[i];
+	}
 	return reser;
+}
+void freeReservation(Reservation* reservation) {
+	free(&reservation->peopleInRoom);
+	free(&reservation->breakfastReservedPeople);
+	free(&reservation->date);
 }
