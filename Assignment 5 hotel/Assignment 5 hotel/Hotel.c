@@ -27,8 +27,8 @@ void showHotelStatus(Hotel* hotel) {
 	for (int i = 0;i < HOTEL_FLOORS;i++) {
 		for (int j = 0;j < ROOMS_PER_FLOOR;j++) {
 			if (hotel->rooms[i][j]->occupied)
-				printf("Room %d%d is occupied, it has %d people of which %d assigned for breakfast \n"
-					,i + 1, j, hotel->rooms[i][j]->people, hotel->rooms[i][j]->breakfastPeople);
+				printf("Room %d is occupied, it has %d people of which %d assigned for breakfast \n"
+					,(i * ROOMS_PER_FLOOR)+j, hotel->rooms[i][j]->people, hotel->rooms[i][j]->breakfastPeople);
 		}
 	}
 }
@@ -42,24 +42,36 @@ void addCustomer(Hotel* hotel, Customer* new_customer) {
 }
 void checkIn(Hotel* hotel) {
 	printf("Please enter your hotel account number according to the list, if you don't have one, sign up as a customer:\n");
-	for(int i=0;i<MAX_CUSTOMERS_AMOUNT;i++){
-		if (hotel->customers[i] == NULL)break;
-		int j = 0;
-		printf("%d:%s\n", i, hotel->customers[i]->name);
+	int i = 0;
+	for(;i<MAX_CUSTOMERS_AMOUNT;i++){
+		if (hotel->customers[i] == NULL) break;
+			printf("%d:%s\n", i, hotel->customers[i]->name);
+		
 	}
 	int customerNumber = 0;
-	scanf_s("%d", &customerNumber);
+	while (1) {
+		scanf_s("%d", &customerNumber);
+		if (customerNumber < i && customerNumber >= 0)break;
+		printf("Please choose an existing customer:\n");
+	}
+	i = 0;
 	printf("Please enter the amount of people for the room:\n");
 	int people = 0;
 	int breakfast = 0;
 	scanf_s("%d", &people);
 	printf("Please enter the amount of people that will have breakfast:\n");
 	scanf_s("%d", &breakfast);
-	for (int i = 0;i < HOTEL_FLOORS;i++) {
+	for (i = 0;i < HOTEL_FLOORS;i++) {
 		for (int j = 0;j < ROOMS_PER_FLOOR;j++) {
 			if (!hotel->rooms[i][j]->occupied) {
-				newReservation("00/00/0000",hotel->customers[customerNumber] , people, breakfast, hotel->rooms[i][j]);
 				hotel->rooms[i][j] = newRoom(true, people, breakfast);
+				for (int n = 0;n < MAX_RESERVATIONS_AMOUNT;n++) {
+					if (hotel->reservations[n] == NULL) {
+						hotel->reservations[n] = newReservation("00/00/0000", hotel->customers[customerNumber], people, breakfast, hotel->rooms[i][j]);
+						break;
+					}
+				}
+				
 				return;
 			}
 		}
@@ -67,19 +79,47 @@ void checkIn(Hotel* hotel) {
 	printf("We could not complete the order since the hotel is fully occupied.\n");
 }
 void checkOut(Hotel* hotel, int roomNumber) {
-	for (int i = 0;i < HOTEL_FLOORS;i++) {
-		for (int j = 0;j < ROOMS_PER_FLOOR;j++) {
+	if (roomNumber == -1)return;
+	Room* room = newEmptyRoom();
+	int i = 0;
+	int j = 0;
+	for (;i < HOTEL_FLOORS;i++) {
+		for (;j < ROOMS_PER_FLOOR;j++) {
 			if (!roomNumber--) {
-				free(hotel->rooms[i][j]);
-				hotel->rooms[i][j] = newEmptyRoom();
+				goto out;
 			}
 		}
 	}
+	out:
+	for (int n = 0;n < MAX_RESERVATIONS_AMOUNT;n++) {
+		if (hotel->reservations[n] != NULL && hotel->reservations[n]->room==room) {
+			hotel->reservations[n] = NULL;
+			break;
+		}
+	}
+	hotel->rooms[i][j] = newEmptyRoom();
 }
+int getRoomNumber(Hotel* hotel, Customer* cust) {
+	int n = 0;
+	for (;n < MAX_RESERVATIONS_AMOUNT;n++) {
+		if (hotel->reservations[n]!=NULL&&hotel->reservations[n]->customer == cust) {
+			break;
+		}
+	}
+	for (int i = 0;i < HOTEL_FLOORS;i++) {
+		for (int j = 0;j < ROOMS_PER_FLOOR;j++) {
+			if (hotel->rooms[i][j]==hotel->reservations[n]->room) {
+				return i*ROOMS_PER_FLOOR+j;
+			}
+		}
+	}
+	return -1;
+}
+
 
 void freeHotel(Hotel* hotel) {
 	//free rooms
-	/*
+	
 	for (int i = 0;i < HOTEL_FLOORS;i++) {
 		for (int j = 0;j < ROOMS_PER_FLOOR;j++) {
 			free(hotel->rooms[i][j]);
@@ -91,10 +131,10 @@ void freeHotel(Hotel* hotel) {
 	}
 	//free reservations
 	for (int i = 0;i < MAX_RESERVATIONS_AMOUNT;i++) {
-		freeReservation(hotel->reservations[i]);
+		free(hotel->reservations[i]);
 	}
 	free(hotel);
-	*/
+	
 }
 
 

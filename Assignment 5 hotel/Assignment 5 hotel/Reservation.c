@@ -16,8 +16,4 @@ Reservation* newReservation(char date[DATE_FORMAT_LENGTH], Customer* customer, i
 	}
 	return reser;
 }
-void freeReservation(Reservation* reservation) {
-	free(&reservation->peopleInRoom);
-	free(&reservation->breakfastReservedPeople);
-	free(&reservation->date);
-}
+

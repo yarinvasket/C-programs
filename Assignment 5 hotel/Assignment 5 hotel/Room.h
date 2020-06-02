@@ -8,5 +8,5 @@ typedef struct Room {
 }Room;
 Room* newEmptyRoom();
 Room* newRoom(bool occupied, int people, int breakfastPeople);
-
+bool equals(Room* ptr1, Room* ptr2);
 

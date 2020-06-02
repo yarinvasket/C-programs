@@ -9,5 +9,4 @@ typedef struct Reservation {
 	int breakfastReservedPeople;
 	Room* room;
 }Reservation;
-void freeReservation(Reservation* reservation);
 Reservation* newReservation(char date[DATE_FORMAT_LENGTH], Customer* customer, int peopleInRoom, int breakfastPeople, Room* room);

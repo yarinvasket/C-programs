@@ -17,4 +17,5 @@ Hotel* newHotel();
 void showHotelStatus(Hotel* hotel); 
 void addCustomer(Hotel* hotel,Customer* new_customer);
 void freeHotel(Hotel* hotel);
+int getRoomNumber(Hotel* hotel, Customer* cust);
 
