@@ -1,13 +1,13 @@
 #include "MergeSort.h"
-void merge(void* arr[] ,size_t size , int l, int m, int r)
+void merge(void* arr[] ,size_t size , int l, int m, int r, int (*compar)(const void*, const void*))
 {
     int i, j, k;
     int n1 = m - l + 1;
     int n2 = r - m;
 
     /* create temp arrays */
-    char left[n1];
-    char right[n2];
+    void* left;
+    void* right;
 
     /* Copy data to temp arrays L[] and R[] */
     for (i = 0; i < n1; i++)
@@ -21,7 +21,7 @@ void merge(void* arr[] ,size_t size , int l, int m, int r)
     k = l; // Initial index of merged subarray 
     while (i < n1 && j < n2)
     {
-        if (left[i] <= right[j])
+        if ((*compar)(*(&left + i * size), *(&right + i * size))  <=0)
         {
             arr[k] = left[i];
             i++;
