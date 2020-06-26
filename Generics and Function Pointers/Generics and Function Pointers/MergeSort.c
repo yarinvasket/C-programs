@@ -23,12 +23,12 @@ void merge(void* arr[] ,size_t size , int l, int m, int r, int (*compar)(const v
     {
         if ((*compar)(*(&left + i * size), *(&right + i * size))  <=0)
         {
-            arr[k] = left[i];
+            arr[k] = *(&left + i * size);
             i++;
         }
         else
         {
-            arr[k] = right[j];
+            arr[k] = *(&left + i * size);
             j++;
         }
         k++;
