@@ -1,4 +1,3 @@
-#pragma once
 #include <stdio.h>
 #include <stdlib.h>
 #include "Matrix.h"
@@ -37,12 +36,29 @@ void copy2DArrayToMatrix(Matrix* mat, int** twoDArray, int col_size, int row_siz
 Matrix* addMatrix(Matrix* mat1, Matrix* mat2) {
 	if (mat1->col_size != mat2->col_size || mat1->row_size != mat2->row_size) {
 		printf("Can not add two matrix with different dimensions\n");
-		return;
+		return NULL;
 	}
 	Matrix* out = newMatrix(mat1->col_size, mat1->row_size);
 	for (int i = 0;i < out->col_size;i++) {
 		for (int j = 0;j < out->row_size;j++) {
 			*(*(out->matrix + i) + j) = *(*(mat1->matrix + i) + j) + *(*(mat2->matrix + i) + j);
+		}
+	}
+	return out;
+}
+Matrix* multiplyMatrix(Matrix* mat1, Matrix* mat2) {
+	if (mat1->col_size != mat2->row_size) {
+		printf("Matrix 1 columns must be equal to matrix 2 rows\n");
+		return NULL;
+	}
+	Matrix* out = newMatrix(mat2->col_size, mat1->row_size);
+	for (int i = 0; i < out->col_size; i++) {
+		for (int j = 0; j < out->row_size; j++) {
+			int sum = 0;
+			for (int k = 0; k < mat1->col_size; k++) {
+				sum += mat1->matrix[k][j] * mat2->matrix[i][k];
+			}
+			out->matrix[i][j] = sum;
 		}
 	}
 	return out;
